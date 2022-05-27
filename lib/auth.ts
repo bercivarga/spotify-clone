@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { User } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "./prisma";
@@ -8,7 +9,7 @@ const { COOKIE_ACCESS_TOKEN_NAME, JWT_SECRET } = process.env;
 type HandlerType = (
   req: NextApiRequest,
   res: NextApiResponse,
-  user?: any
+  user?: User
 ) => void;
 
 export const validateRoute = (handler: HandlerType): HandlerType => {
@@ -41,7 +42,7 @@ export const validateRoute = (handler: HandlerType): HandlerType => {
         res.json({ error: "Not authorized!" });
         return;
       }
-      return handler(req, res, user);
+      return handler(req, res, user as unknown as User);
     }
 
     res.status(401);
