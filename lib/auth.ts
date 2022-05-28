@@ -30,7 +30,7 @@ export const validateRoute = (handler: HandlerType): HandlerType => {
           time: string;
         };
 
-        user = prisma.user.findUnique({
+        user = await prisma.user.findUnique({
           where: { id },
         });
 

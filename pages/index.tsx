@@ -1,22 +1,51 @@
 import { FC } from "react";
 import { Artist } from "@prisma/client";
 import { GetServerSideProps } from "next";
-import { Avatar, Box, Flex, VStack, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Flex,
+  VStack,
+  Text,
+  Spinner,
+  Center,
+} from "@chakra-ui/react";
 import GradientLayout from "../components/gradientLayout";
 import prisma from "../lib/prisma";
+import { useMe } from "../lib/hooks";
 
 interface IProps {
   artists: Artist[];
 }
 
 const Home: FC<IProps> = ({ artists }) => {
+  const { user, isLoading, isError } = useMe();
+
+  if (isLoading) {
+    return (
+      <Center bg="black" w="full" h="full">
+        <Spinner />
+      </Center>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Box width="full" height="full" bg="red" color="white">
+        <Text size="2xl" fontWeight="bold">
+          Something went wrong...
+        </Text>
+      </Box>
+    );
+  }
+
   return (
     <GradientLayout
       color="blue"
-      title="bercivarga"
+      title={user.userName}
       description="home page lorem ipsum"
       subtitle="home"
-      image="https://avatars.githubusercontent.com/u/65171545?v=4"
+      image={user.image}
       roundImage
     >
       <Box color="white" marginX="20px">
@@ -31,6 +60,7 @@ const Home: FC<IProps> = ({ artists }) => {
         <Flex marginTop="20px" gap="8px">
           {artists.map((artist) => (
             <VStack
+              key={artist.id}
               w="20%"
               align="start"
               padding="20px"

@@ -32,6 +32,8 @@ const run = async () => {
     create: {
       email: "user@test.com",
       password: bcrypt.hashSync("password", salt),
+      userName: "ferike",
+      image: "/cat_teeth.jpeg",
     },
   });
 
@@ -56,8 +58,7 @@ const run = async () => {
 };
 
 run()
-  .catch((e) => {
-    console.error(e);
+  .catch(() => {
     process.exit(1);
   })
   .finally(async () => {
