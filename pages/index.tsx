@@ -31,9 +31,12 @@ const Home: FC<IProps> = ({ artists }) => {
 
   if (isError) {
     return (
-      <Box width="full" height="full" bg="red" color="white">
+      <Box p={10} width="full" height="full" bg="red" color="white">
         <Text size="2xl" fontWeight="bold">
           Something went wrong...
+        </Text>
+        <Text size="2xl" fontWeight="bold" marginTop={4}>
+          If there was something here before, then the server is probably down.
         </Text>
       </Box>
     );
@@ -43,7 +46,7 @@ const Home: FC<IProps> = ({ artists }) => {
     <GradientLayout
       color="blue"
       title={user.userName}
-      description="home page lorem ipsum"
+      description={`You've ${user.playListCount} awesome playlists waiting for you`}
       subtitle="home"
       image={user.image}
       roundImage

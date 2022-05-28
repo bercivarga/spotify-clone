@@ -12,6 +12,21 @@ type HandlerType = (
   user?: User
 ) => void;
 
+type JWTobject = {
+  id: number;
+  email: string;
+  time: string;
+};
+
+export const validateToken = (token: string) => {
+  if (!JWT_SECRET) {
+    throw new Error("No secret environment variable set!");
+  }
+
+  const user = jwt.verify(token, JWT_SECRET) as JWTobject;
+  return user;
+};
+
 export const validateRoute = (handler: HandlerType): HandlerType => {
   if (!COOKIE_ACCESS_TOKEN_NAME || !JWT_SECRET) {
     throw new Error("Environment variables missing");
@@ -24,11 +39,7 @@ export const validateRoute = (handler: HandlerType): HandlerType => {
       let user;
 
       try {
-        const { id } = jwt.verify(token, JWT_SECRET) as {
-          id: number;
-          email: string;
-          time: string;
-        };
+        const { id } = validateToken(token);
 
         user = await prisma.user.findUnique({
           where: { id },

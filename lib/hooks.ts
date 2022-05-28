@@ -2,11 +2,13 @@ import { Playlist, User } from "@prisma/client";
 import useSWR from "swr";
 import fetcher from "./fetcher";
 
+type CombinedUserType = User & { playListCount: number };
+
 export const useMe = () => {
   const { data, error } = useSWR("/me", fetcher);
 
   return {
-    user: data as User,
+    user: data as CombinedUserType,
     isLoading: !data && !error,
     isError: error,
   };
